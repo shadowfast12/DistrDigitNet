@@ -36,6 +36,7 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.25</version>
         </dependency>
+
     </dependencies>
 
     <properties>
@@ -52,9 +53,6 @@
                 <version>3.0.0</version>
                 <configuration>
 <!--                    <mainClass>org.example.Main</mainClass>-->
-                    <jvmArgs>
-                        <jvmArg>-Xmx1024m</jvmArg>
-                    </jvmArgs>
                 </configuration>
             </plugin>
         </plugins>
