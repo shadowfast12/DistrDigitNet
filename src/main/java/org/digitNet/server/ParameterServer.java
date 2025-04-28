@@ -38,7 +38,7 @@ public class ParameterServer {
         String trainImgs   = args[5];
         String trainLbls   = args[6];
 
-        // 1) Build your CNN config
+        // CNN CONFIG
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(123)
                 .updater(new Adam(lr))
@@ -62,15 +62,14 @@ public class ParameterServer {
                 .setInputType(InputType.convolutionalFlat(28,28,1))
                 .build();
 
-        // 2) Init global model
         MultiLayerNetwork globalModel = new MultiLayerNetwork(conf);
         globalModel.init();
 
-        // 3) Pre-shard the dataset
+        // Pre-shard the dataset
         List<DataShard> shards = DataLoader.loadShards(trainImgs, trainLbls, numShards);
         ShardManager shardManager = new ShardManager(shards);
 
-        // 4) Progress counter + heartbeat
+        // Progress counter + heartbeat
         AtomicInteger shardsDone = new AtomicInteger(0);
         ScheduledExecutorService hb = Executors.newSingleThreadScheduledExecutor();
         hb.scheduleAtFixedRate(() -> {
@@ -81,7 +80,7 @@ public class ParameterServer {
                     done, numShards, pct, left);
         }, 0, 1, TimeUnit.SECONDS);
 
-        // 5) Serve clients
+        // -> clients
         ExecutorService pool = Executors.newCachedThreadPool();
         try (ServerSocket server = new ServerSocket(port)) {
             server.setSoTimeout(1000);  // 1 s accept timeout
@@ -97,17 +96,16 @@ public class ParameterServer {
                             shardsDone, numShards
                     ));
                 } catch (SocketTimeoutException e) {
-                    // no client this second – loop to check isEmpty()
                 }
             }
         }
 
-        // 6) Wait for handlers
+        // Wait for handlers
         pool.shutdown();
         pool.awaitTermination(1, TimeUnit.HOURS);
         hb.shutdownNow();
 
-        // 7) Save model
+        // Save model
         File out = new File("globalModel.zip");
         ModelSerializer.writeModel(globalModel, out, true);
         System.out.println(" Training complete; model saved to " + out.getAbsolutePath());

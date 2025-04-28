@@ -76,7 +76,7 @@ public class WorkerClient {
                 byte[] yBuf = new byte[yLen]; in.readFully(yBuf);
                 INDArray Y = Nd4j.fromByteArray(yBuf);
 
-                // local training
+                // local training per epochs
                 List<DataSet> data = new DataSet(X, Y).asList();
                 var iter = new ListDataSetIterator<>(data, batchSize);
                 for (int e = 1; e <= localEpochs; e++) {

@@ -17,9 +17,9 @@ public class ModelEvaluator {
             System.exit(1);
         }
 
-        String modelFile   = args[0];              //  "globalModel.zip"
-        String testImages  = args[1];              //  "t10k-images.idx3-ubyte"
-        String testLabels  = args[2];              // "t10k-labels.idx1-ubyte"
+        String modelFile   = args[0];
+        String testImages  = args[1];
+        String testLabels  = args[2];
         int batchSize      = args.length > 3
                 ? Integer.parseInt(args[3])
                 : 64;
