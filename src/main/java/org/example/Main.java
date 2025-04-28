@@ -43,7 +43,7 @@ public class Main {
         int channels      = 1;
         int numClasses    = 10;
 
-        // ---- 1) Build a small CNN (you can switch back to Dense only if you like) ----
+        // SMALL CNN
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(seed)
                 .updater(new Adam(lr))
